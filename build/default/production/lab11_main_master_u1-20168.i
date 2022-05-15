@@ -1,4 +1,4 @@
-# 1 "lab11_main-20168.c"
+# 1 "lab11_main_master_u1-20168.c"
 # 1 "<built-in>" 1
 # 1 "<built-in>" 3
 # 288 "<built-in>" 3
@@ -6,8 +6,8 @@
 # 1 "<built-in>" 2
 # 1 "C:/Program Files/Microchip/MPLABX/v6.00/packs/Microchip/PIC16Fxxx_DFP/1.3.42/xc8\\pic\\include\\language_support.h" 1 3
 # 2 "<built-in>" 2
-# 1 "lab11_main-20168.c" 2
-# 16 "lab11_main-20168.c"
+# 1 "lab11_main_master_u1-20168.c" 2
+# 15 "lab11_main_master_u1-20168.c"
 #pragma config FOSC = INTRC_NOCLKOUT
 #pragma config WDTE = OFF
 #pragma config PWRTE = OFF
@@ -2644,34 +2644,27 @@ extern __bank0 unsigned char __resetbits;
 extern __bank0 __bit __powerdown;
 extern __bank0 __bit __timeout;
 # 29 "C:/Program Files/Microchip/MPLABX/v6.00/packs/Microchip/PIC16Fxxx_DFP/1.3.42/xc8\\pic\\include\\xc.h" 2 3
-# 34 "lab11_main-20168.c" 2
+# 33 "lab11_main_master_u1-20168.c" 2
 
 # 1 "C:\\Program Files\\Microchip\\xc8\\v2.35\\pic\\include\\c90\\stdint.h" 1 3
-# 35 "lab11_main-20168.c" 2
-
-
-
-
-
-
-uint8_t pot_in;
+# 34 "lab11_main_master_u1-20168.c" 2
+# 43 "lab11_main_master_u1-20168.c"
+uint8_t pot_in = 0;
 
 
 void setup(void);
 
 
 void __attribute__((picinterrupt(("")))) isr(void){
-    if (PIR1bits.SSPIF){
-        _delay((unsigned long)((40)*(1000000/4000000.0)));
-        PORTD = SSPBUF;
-        PIR1bits.SSPIF = 0;
-    }
+
+
     if (PIR1bits.ADIF){
         if (ADCON0bits.CHS == 1){
            pot_in = ADRESH;
         }
         PIR1bits.ADIF = 0;
     }
+
     return;
 }
 
@@ -2682,14 +2675,33 @@ void main(void) {
     while(1){
         if (ADCON0bits.GO == 0){
             ADCON0bits.GO = 1;
-        }
-        if(PORTAbits.RA0){
             _delay((unsigned long)((40)*(1000000/4000000.0)));
-            if(SSPSTATbits.BF){
-                SSPBUF = pot_in;
-                PORTD = pot_in;
-            }
         }
+
+
+        PORTAbits.RA6 = 1;
+        _delay((unsigned long)((50)*(1000000/4000.0)));
+        PORTAbits.RA7 = 0;
+        _delay((unsigned long)((50)*(1000000/4000.0)));
+
+
+        SSPBUF = pot_in;
+        while(!SSPSTATbits.BF);
+        PORTB = pot_in;
+
+
+        PORTAbits.RA7 = 1;
+        _delay((unsigned long)((50)*(1000000/4000.0)));
+        PORTAbits.RA6 = 0;
+        _delay((unsigned long)((50)*(1000000/4000.0)));
+
+
+        SSPBUF = 0xFF;
+        while(!SSPSTATbits.BF);
+        PORTD = SSPBUF;
+
+        _delay((unsigned long)((100)*(1000000/4000.0)));
+
     }
     return;
 }
@@ -2699,8 +2711,11 @@ void setup(void){
     ANSEL = 0b00000010;
     ANSELH = 0;
 
-    TRISA = 0b00100011;
+    TRISA = 0b00000010;
     PORTA = 0;
+
+    TRISB = 0;
+    PORTB = 0;
 
     TRISD = 0;
     PORTD = 0;
@@ -2711,53 +2726,32 @@ void setup(void){
 
 
 
-    if (PORTAbits.RA0){
-        TRISC = 0b00010000;
-        PORTC = 0;
+
+    TRISC = 0b00010000;
+    PORTC = 0;
 
 
-        SSPCONbits.SSPM = 0b0000;
-        SSPCONbits.CKP = 0;
-        SSPCONbits.SSPEN = 1;
+    SSPCONbits.SSPM = 0b0000;
+    SSPCONbits.CKP = 0;
+    SSPCONbits.SSPEN = 1;
 
-        SSPSTATbits.CKE = 1;
-        SSPSTATbits.SMP = 1;
-        SSPBUF = pot_in;
-
-
-        INTCONbits.GIE = 1;
-        INTCONbits.PEIE = 1;
-        PIR1bits.ADIF = 0;
-        PIE1bits.ADIE = 1;
+    SSPSTATbits.CKE = 1;
+    SSPSTATbits.SMP = 1;
+    SSPBUF = 50;
 
 
-        ADCON0bits.ADCS = 0b01;
-        ADCON1bits.VCFG0 = 0;
-        ADCON1bits.VCFG1 = 0;
-
-        ADCON0bits.CHS = 0b0001;
-        ADCON1bits.ADFM = 0;
-        ADCON0bits.ADON = 1;
-        _delay((unsigned long)((40)*(1000000/4000000.0)));
-    }
+    INTCONbits.GIE = 1;
+    INTCONbits.PEIE = 1;
+    PIR1bits.ADIF = 0;
+    PIE1bits.ADIE = 1;
 
 
-    else{
-        TRISC = 0b00011000;
-        PORTC = 0;
+    ADCON0bits.ADCS = 0b01;
+    ADCON1bits.VCFG0 = 0;
+    ADCON1bits.VCFG1 = 0;
 
-
-        SSPCONbits.SSPM = 0b0100;
-        SSPCONbits.CKP = 0;
-        SSPCONbits.SSPEN = 1;
-
-        SSPSTATbits.CKE = 1;
-        SSPSTATbits.SMP = 0;
-
-
-        PIR1bits.SSPIF = 0;
-        PIE1bits.SSPIE = 1;
-        INTCONbits.GIE = 1;
-        INTCONbits.PEIE = 1;
-    }
+    ADCON0bits.CHS = 0b0001;
+    ADCON1bits.ADFM = 0;
+    ADCON0bits.ADON = 1;
+    _delay((unsigned long)((40)*(1000000/4000000.0)));
 }

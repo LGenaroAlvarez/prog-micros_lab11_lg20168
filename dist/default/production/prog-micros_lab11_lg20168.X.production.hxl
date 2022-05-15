@@ -9,12 +9,12 @@
 ### Memory Usage ###
  Intel Hex-file ranges:
   0h - 5h		(dist/default/production\prog-micros_lab11_lg20168.X.production.hex)
-  8h - 199h		(dist/default/production\prog-micros_lab11_lg20168.X.production.hex)
+  8h - 1CDh		(dist/default/production\prog-micros_lab11_lg20168.X.production.hex)
   4000h - 4007h		(dist/default/production\prog-micros_lab11_lg20168.X.production.hex)
   400Eh - 4011h		(dist/default/production\prog-micros_lab11_lg20168.X.production.hex)
  Unused ranges:
   6h - 7h
-  19Ah - 3FFFh
+  1CEh - 3FFFh
   4008h - 400Dh
 
 ### Hex Memory Map ###
@@ -49,7 +49,10 @@
 00000160 | H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1
 00000170 | H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1
 00000180 | H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1
-00000190 | H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 -- -- -- -- -- --
+00000190 | H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1
+000001A0 | H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1
+000001B0 | H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1
+000001C0 | H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 H1 -- --
 ----------------------------------------------------------
 00004000 | H1 H1 H1 H1 H1 H1 H1 H1 -- -- -- -- -- -- H1 H1
 00004010 | H1 H1 -- -- -- -- -- -- -- -- -- -- -- -- -- --
